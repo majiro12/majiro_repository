@@ -1,0 +1,23 @@
+{
+  "name": "graduation_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majiro12/majiro-repository.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/majiro12/majiro-repository/issues"
+  },
+  "homepage": "https://github.com/majiro12/majiro-repository#readme",
+  "dependencies": {
+    "networked-aframe": "^0.11.0"
+  }
+}
