@@ -5,9 +5,6 @@ const path = require('path');
 const easyrtc = require('open-easyrtc');
 
 const app = express();
-const server = http.Server(app);
-
-const io = socketIo(server);
 
 const port = 3000;
 
@@ -19,7 +16,10 @@ app.get('/', (req, res) =>{
     res.sendFile(__dirname + '/public/3d_place.html');
 })
 
-/*音声機能　必要ならコメントアウトを外す
+const server = http.Server(app);
+const io = socketIo(server);
+
+//音声機能　必要ならコメントアウトを外す
 easyrtc.setOption("logLevel", "debug");
 
 // Overriding the default easyrtcAuth listener, only so we can directly access its callback
@@ -53,15 +53,15 @@ var rtc = easyrtc.listen(app, io, null, function(err, rtcRef) {
 
         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
-});*/
+});
 
 //3000番のポートでHTTPサーバを起動
 server.listen(port, ()=>{
-    console.log('The server has started and is listening on port number');
+    console.log('The server has started and is listening on port number:' + port);
 });
 
 //クライアントとのコネクションを確立　確立したら'connection'
-io.on('connection', (socket) => {
+/*io.on('connection', (socket) => {
     console.log('connection');
 
     //'sendMessage'で受信可能
@@ -72,5 +72,5 @@ io.on('connection', (socket) => {
         //'receiveMessage'で受信したメッセージをすべてのクライアントへ送信
         io.emit('receiveMessage', message);
     })
-});
+});*/
 
