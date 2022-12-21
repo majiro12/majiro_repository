@@ -12,9 +12,13 @@ app.use(express.static(path.join(__dirname, '/public/dist')));
 //publicファイルの入手
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) =>{
+/*app.get('/', (req, res) =>{
     res.sendFile(__dirname + '/public/3d_place.html');
-})
+});*/
+
+app.get('/', (req, res) =>{
+    res.sendFile(__dirname + '/public/login.html');
+});
 
 const server = http.Server(app);
 const io = socketIo(server);
