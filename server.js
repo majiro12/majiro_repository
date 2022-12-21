@@ -3,6 +3,7 @@ const express = require('express');
 const socketIo = require('socket.io');
 const path = require('path');
 const easyrtc = require('open-easyrtc');
+const { create } = require('domain');
 
 const app = express();
 
@@ -19,6 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) =>{
     res.sendFile(__dirname + '/public/login.html');
 });
+
+
+
+
 
 const server = http.Server(app);
 const io = socketIo(server);
@@ -77,4 +82,60 @@ server.listen(port, ()=>{
         io.emit('receiveMessage', message);
     })
 });*/
+
+const mysql = require('mysql');
+
+//ユーザ認証
+function user_id(param){
+    let name = param[0].split('=')[1];
+    let password = param[1].split('=')[1];
+
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'Ysakura35',
+        database: 'login'
+    });
+
+    connection.connect(function(err){
+        if (err) throw err;
+        console.log('DB connect');
+        const sql = 'SELECT name FROM users WHERE name = "' + 
+                    name +
+                    '"AND password = "' +
+                    password +
+                    '";';
+        connection.query(sql, function(err, result, fields){
+            if (err || !result || result.length == 0 || result.affectedRows == 0 || !result[0] || !result[0].name || result[0].name != name) {
+                flg = false;
+                return;
+            } else {
+                flg = true;
+                return;
+            }
+        });
+    });
+};
+
+
+let flg = false;
+app.post('/auth', (req, res) => {
+    let data = '';
+    req.on('data', function(chunk){
+        data += chunk;
+    }).on('end', function(){
+        console.log(data);
+        user_id(data.split('&'));
+        setTimeout(function(){
+            if (flg) {
+                res.sendFile(__dirname + '/public/3d_place.html');
+                console.log('認証成功');
+            } else {
+                res.sendFile(__dirname + '/public/login.html');
+                console.log('認証失敗');
+            }
+        }, 1000);
+    })
+});
+
 

@@ -8,35 +8,23 @@
     </head>
     <body>
         <center>
-            <form acrion="login" method="post">
+            <form action="auth" method="post">
                 <br>
-                <div>user name
-                <input type="text" neme="uid" size="40" maxlength="32" autocomplete="OFF"/></div>
+                user name
+                <input type="text" name="uid" size="40" maxlength="32">
 
-                <div>password
-                <input type="password" name="pwd" size="40" maxlength="32" autocomplete="OFF"/></div>
+                <br>
+                password
+                <input type="password" name="pwd" size="40" maxlength="32">
 
                 <br><br>
-                <div><input type="submit" value="Login"/></div>
+                <input type="submit" value="Login"/>
             </form>
+
             <div>
                 <a href="3d_place.html">3d_place</a>
                 <span>Simple avatars with synced color</span>
             </div>
         </center>
-
-        <script>
-            
-            window.onload = function(){
-                const url = window.location.href;
-                if (!url || !url.split("msg=")[1]){
-                    return;
-                }
-                let msg = document.getElementById("msg");
-                msg.innerHTML = decodeURIComponent(url.split("msg=")[1]);
-                return;
-            }
-
-        </script>
     </body>
 </html>
