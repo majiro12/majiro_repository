@@ -21,50 +21,7 @@
 
     </head>
     <body> 
-
-        <!--<input id="inputText" type="text">
-        <input id="sendButton" type="submit">
-        <ul id="messageList" >
-        
-        <script>
-
-            const socket = io();
-
-            const clearText = () =>{
-                document.getElementById('inputText').value = '';
-            }
-
-            const addMessageList = (message) => {
-                const ul = document.getElementById('messageList');
-                const li = document.createElement('li');
-                const text = document.createTextNode(message);
-                li.appendChild(text);
-                ul.appendChild(li);
-            }
-
-            //送信ボタンのクリックイベント検知
-            document.getElementById('sendButton').addEventListener('click', () => {
-                 //inputに入力されたテキスト取得
-                 let inputMessage = document.getElementById('inputText').value;
-
-                 if (inputMessage === ''){
-                    return;
-                 }
-
-                 //'sendMessage'イベント発火
-                 socket.emit('sendMessage', inputMessage);
-
-                 //input内のテキストを空にする
-                 clearText();
-            })
-
-            //'receiveMessage'イベントの発火を検知
-            //第一引数に受信したメッセージ
-            socket.on('receiveMessage', (message) => {
-                //受信したメッセージをulタグに挿入
-                addMessageList(message);
-            });-->
-
+      
         </script>
 
         <!--３D空間の作成-->
@@ -77,52 +34,34 @@
         >
         <a-assets>
             <!-- Templates -->
-            <!-- Camera Rig / Player -->
+            <!-- カメラ -->
             <template id="rig-template">
               <a-entity></a-entity>
             </template>
     
-            <!-- Head / Avatar -->
-            <!--      a few spheres make a head + eyes + pupils    -->
+            <!-- アバターのテンプレ -->
             <template id="avatar-template">
               <a-entity class="avatar">
-                <!-- notice this child sphere, with class .head, has the random-color component; this modifies the material component's color property -->
+                
                 <a-sphere class="head" scale="0.2 0.22 0.2" random-color></a-sphere>
-                <a-entity class="face" position="0 0.05 0">
-                  <a-sphere class="eye" color="white" position="0.06 0.05 -0.16" scale="0.04 0.04 0.04">
-                    <a-sphere class="pupil" color="black" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>
-                  </a-sphere>
-                  <a-sphere class="eye" color="white" position="-0.06 0.05 -0.16" scale="0.04 0.04 0.04">
-                    <a-sphere class="pupil" color="black" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>
-                  </a-sphere>
-                </a-entity>
+                <a-box class="norse" scale="0.1 0.1 0.3" position="0 0 -0.2" random-color></a-box>
+                
               </a-entity>
             </template>
-            <!-- /Templates -->
+        
           </a-assets>
-    
+
+          <!--身の回りの環境-->
           <a-entity environment="preset:starry;groundColor:#000000;"></a-entity>
           <a-entity light="type:ambient;intensity:0.5"></a-entity>
     
-          <!--   Here we declare only the local user's avatar, which we then broadcast to other users     -->
-          <!--   The 'spawn-in-circle' component will set the position and rotation of #rig;
-                 because this entity also has the networked component, and position and rotation are tracked by default,
-                 the changes made by spawn-in-circle will be kept in sync with other networked users.
-                 Also note that by adding the networked component with a template reference, we generate that full template,
-                 including all applicable child elements. However, because we don't need to see our own avatar, we use the
-                 `attachTemplateToLocal:false` option. This makes our local copies invisible on our machine, but visible on everyone else's.
-          -->
-          <a-entity id="rig" movement-controls="fly:true;" spawn-in-circle="radius:3" networked="template:#rig-template;">
-            <!-- Here we add the camera. Adding the camera within a 'rig' is standard practice.
-             We set the camera to head height for e.g. computer users, but otherwise never touch it again; if the user enters VR,
-             its rotation and position will be updated by the headset in VR. If we need to touch the user's position
-             or rotation, we always do that by adjusting the rig parent of the active camera. By making that rig--and the
-             active camera appended to it--both networked, we ensure all player movement is kept in sync.
-            -->
+          <!--プレイヤーを表示-->
+          <a-entity id="rig" movement-controls="fly:true;" position="4 0 2" networked="template:#rig-template;">
+           
             <a-entity
               id="player"
               camera
-              position="0 1.6 0"
+              position="4 1.6 2"
               look-controls
               networked="template:#avatar-template;"
               visible="false"
@@ -131,6 +70,7 @@
           </a-entity>
 
 
+          <!--aframeのオブジェクト-->
             <a-box position="0 1 0" rotation="20 40 0" color="red" scale="1 1 1"></a-box>
             
             <script src="move.js"></script>
