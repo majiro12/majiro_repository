@@ -100,7 +100,7 @@ function auth(param){
 };
 
 //引数をmysqlを通して渡す
-function user_id(){
+/*function user_id(){
 
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -115,12 +115,12 @@ function user_id(){
         console.log('www');
     }); 
     return;
-}
+}*/
 
 let flg = false;
 let sql_result;
 
-app.post('/auth', (req, res) => {
+app.post('/', (req, res) => {
     let data = '';
     req.on('data', function(chunk){
         data += chunk;
@@ -131,7 +131,7 @@ app.post('/auth', (req, res) => {
             if (flg) {
                 res.sendFile(__dirname + '/public/3d_place.html');
                 console.log('認証成功');
-                user_id();
+                /*user_id();*/
             } else {
                 res.sendFile(__dirname + '/public/login.html');
                 console.log('認証失敗');
