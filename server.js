@@ -16,10 +16,6 @@ app.get('/', (req, res) =>{
     res.sendFile(__dirname + '/public/login.html');
 });
 
-
-
-
-
 const server = http.Server(app);
 const io = socketIo(server);
 
@@ -116,6 +112,7 @@ function auth(param){
     }); 
     return;
 }*/
+
 
 let flg = false;
 let sql_result;

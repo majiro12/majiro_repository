@@ -19,18 +19,22 @@
        <!--ランダムな色用-->
         <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
 
-        <style>
-          #chatUI {
-            width: 400px;
-            height: 200px;
-            position: absolute;
-            z-index: 10;
-            background-color: whitesmoke;
-            overflow: auto;
-          }
-        </style>
+      <!--position_loadの呼び出し-->
+      <script src="./position.js"></script>
+
+      <style>
+        #chatUI {
+          width: 400px;
+          height: 200px;
+          position: absolute;
+          z-index: 10;
+          background-color: whitesmoke;
+          overflow: auto;
+        }
+      </style>
     </head>
     <body> 
+
       <div id="chatUI">
         <input type="text">
         <button>
@@ -84,7 +88,6 @@
             </a-entity>
           </a-entity>
 
-
           <!--aframeのオブジェクト-->
             <a-box position="0 1 0" rotation="20 40 0" color="red" scale="1 1 1"></a-box>
             
@@ -94,44 +97,31 @@
             
              <a-text position="-1 1.25 -3" value="Hello World" color="black"></a-text>
 
-             <a-entity id="particles" particle-system="preset: snow"></a-entity>
+
         </a-scene>
 
         <script>
-          // On mobile remove elements that are resource heavy
-      var isMobile = AFRAME.utils.device.isMobile();
+          /*let isMobile = AFRAME.utils.device.isMobile();
 
-      if (isMobile) {
-        var particles = document.getElementById('particles');
-        particles.parentNode.removeChild(particles);
-      }
+          if (isMobile) {
+            let particles = document.getElementById('particles');
+            particles.parentNode.removeChild(particles);
+          };*/
 
-// Define custom schema for syncing avatar color, set by random-color
-// NAF.schemas.add({
-//   template: '#avatar-template',
-//   components: [
-//     'position',
-//     'rotation',
-//     {
-//       selector: '.head',
-//       component: 'material',
-//       property: 'color'
-//     }
-//   ]
-// });
-      const btn = document.querySelector("button");
-      const textfield = document.querySelector("input");
-      const log = document.querySelector("#messages")
-      NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {
-        console.log("msg", data, "from", senderId) 
-        messages.innerHTML += senderId + ": " + data.txt + '<br>'
-      })
+          const btn = document.querySelector("button");
+          const textfield = document.querySelector("input");
+          const log = document.querySelector("#messages");
+          NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {
+            console.log("msg", data, "from", senderId);
+            messages.innerHTML += senderId + ": " + data.txt + '<br>';
+          });
 
-      btn.addEventListener("click", evt => {
-        messages.innerHTML += NAF.clientId + ": " + textfield.value + '<br>'
-        NAF.connection.broadcastData("chat", {txt: textfield.value}) 
-      })
+          btn.addEventListener("click", evt => {
+            messages.innerHTML += NAF.clientId + ": " + textfield.value + '<br>';
+            NAF.connection.broadcastData("chat", {txt: textfield.value}); 
+          });
 
         </script>
+
     </body>
 </html>
