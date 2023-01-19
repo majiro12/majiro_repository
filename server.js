@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, '/public/dist')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) =>{
-    res.sendFile(__dirname + '/public/login.html');
+    res.sendFile(__dirname + '/public/first.html');
 });
 
 const server = http.Server(app);
@@ -78,23 +78,56 @@ function auth(param){
     connection.connect(function(err){
         if (err) throw err;
         console.log('DB connect');
-        const sql = 'SELECT id FROM users WHERE name = "' + 
+        const sql = 'SELECT name FROM users WHERE name = "' + 
                     name +
                     '"AND password = "' +
                     password +
                     '";';
         connection.query(sql, function(err, result, fields){
             if (err || !result[0]) {
-                flg = false;
+                flg_login = false;
                 return;
             } else {
-                flg = true;
-                sql_result = result[0].id;
+                flg_login= true;
+                sql_result = result[0].name;
             }
         });
     });
 };
 
+function create(param){
+    let name = param[0].split('=')[1];
+    let password = param[1].split('=')[1];
+
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '1qazxsw2',
+        database: 'login'
+    });
+
+    connection.connect(function(err){
+        if (err) throw err;
+        console.log('DB connect');
+        const sql = 'SELECT name FROM users WHERE name = "' +
+                    name +
+                    '";';
+        connection.query(sql, function(err, result, fields){
+            console.log(result[0]);
+            if(!result[0]){
+                flg_rgt = true;
+                const insert = 'INSERT INTO users (name, password) VALUE ("' +
+                                name +
+                                '","' +
+                                password +
+                                '");';
+                connection.query(insert); 
+            } else {
+                flg_rgt = false;
+            }
+        });
+    });
+}
 //引数をmysqlを通して渡す
 /*function user_id(){
 
@@ -114,10 +147,11 @@ function auth(param){
 }*/
 
 
-let flg = false;
+let flg_login = false;
+let flg_rgt = false
 let sql_result;
 
-app.post('/', (req, res) => {
+app.post('/login.html', (req, res) => {
     let data = '';
     req.on('data', function(chunk){
         data += chunk;
@@ -125,7 +159,7 @@ app.post('/', (req, res) => {
         console.log(data);
         auth(data.split('&'));
         setTimeout(function(){
-            if (flg) {
+            if (flg_login) {
                 res.sendFile(__dirname + '/public/3d_place.html');
                 console.log('認証成功');
                 /*user_id();*/
@@ -137,4 +171,21 @@ app.post('/', (req, res) => {
     })
 });
 
+app.post('/new_user.html', (req,res)=>{
+    let data='';
+    req.on('data', function(chunk){
+        data += chunk;
+    }).on('end', function(){
+        console.log(data);
+        create(data.split('&'));
+        setTimeout(function(){
+            if(flg_rgt) {
+                res.sendFile(__dirname + '/public/3d_place.html');
+            } else {
+                console.log(flg_rgt)
+                res.redirect('new_user.html?msg=すでに使われているユーザ名です');
+            }
+        }, 1000);
+    })
+})
 
